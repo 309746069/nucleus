@@ -1,61 +1,269 @@
 <!DOCTYPE html>
 <html>
-
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Nucleus : Nucleus is an Android library which helps to use the Model-View-Presenter pattern">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-    <title>Nucleus</title>
+    <title>Nucleus by konmik</title>
   </head>
 
   <body>
+    <header>
+      <div class="inner">
+        <h1>Nucleus</h1>
+        <h2>Nucleus is an Android library which helps to use the Model-View-Presenter pattern</h2>
+        <a href="https://github.com/konmik/nucleus" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/konmik/nucleus">View on GitHub</a>
-
-          <h1 id="project_title">Nucleus</h1>
-          <h2 id="project_tagline">Nucleus is an Android library which helps to use the Model-View-Presenter pattern</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/konmik/nucleus/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/konmik/nucleus/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
-<a id="the-model-view-presenter-pattern" class="anchor" href="#the-model-view-presenter-pattern" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Model-View-Presenter pattern</h1>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h3>
+<a id="the-model-view-presenter-pattern" class="anchor" href="#the-model-view-presenter-pattern" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Model-View-Presenter pattern</h3>
 
 <ul>
 <li>
-<strong>View</strong> is an object that displays data and reacts to user actions</li>
+<strong>View</strong> is an object that displays data and reacts to user actions.</li>
 <li>
 <strong>Presenter</strong> is an object that executes commands related background tasks and data changes and provides View with data</li>
 <li>
-<strong>Model</strong> is a data access object such as database or remote server api
-More on this you can find here: <a href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter">Wikipedia: Model-View-Presenter</a>
-</li>
+<strong>Model</strong> is a data access object such as database or remote server api</li>
 </ul>
-      </section>
+
+<p>More on this you can find here:
+<a href="http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter">Wikipedia: Model-View-Presenter</a></p>
+
+<h3>
+<a id="inspiration" class="anchor" href="#inspiration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Inspiration</h3>
+
+<p><a href="http://corner.squareup.com/2014/10/advocating-against-android-fragments.html">Advocating Against Android Fragments</a></p>
+
+<p><a href="https://github.com/square/mortar">mortar</a></p>
+
+<p><a href="http://people.apache.org/%7Efhanik/kiss.html">Keep It Stupid Simple</a></p>
+
+<h1>
+<a id="problem" class="anchor" href="#problem" aria-hidden="true"><span class="octicon octicon-link"></span></a>Problem</h1>
+
+<ul>
+<li>Android development is View-centric</li>
+<li>View can not be considered as a point of stability for application because of it's temporary nature</li>
+<li>Most of modern Android applications just use View-Model architecture</li>
+<li>Programmer is involved into fight with View complexities instead of solving business tasks</li>
+</ul>
+
+<h3>
+<a id="with-just-model-view" class="anchor" href="#with-just-model-view" aria-hidden="true"><span class="octicon octicon-link"></span></a>With just Model-View</h3>
+
+<p><strong>You usually end up with</strong></p>
+
+<p>Everything is connected with everything</p>
+
+<p><img src="nucleus-images/everything_is_connected_with_everything.png" alt=""></p>
+
+<p>If this diagram does not look complex then think about every arrow is asynchronous and every View can disappear and can be recreated at random time. Add some save/restore of View states, caching of Data and several background threads attached to that temporary Views, and the cake is ready!</p>
+
+<p><strong>-or with-</strong></p>
+
+<p><img src="nucleus-images/a_god_object.png" alt=""></p>
+
+<p>A God object which is overcomplicated, its parts can not be reused, tested or easily refactored.</p>
+
+<h1>
+<a id="solution" class="anchor" href="#solution" aria-hidden="true"><span class="octicon octicon-link"></span></a>Solution</h1>
+
+<h2>
+<a id="mvc" class="anchor" href="#mvc" aria-hidden="true"><span class="octicon octicon-link"></span></a>MVC</h2>
+
+<p><img src="nucleus-images/mvp.png" alt=""></p>
+
+<ul>
+<li>Complex tasks are split into simpler tasks and are easier to solve</li>
+<li>Less code, less bugs, easier to debug</li>
+<li>Testable</li>
+</ul>
+
+<p>With Nucleus You can use an Activity or a custom Layout to be your View in MVP. Want more? Just create you own View.</p>
+
+<h2>
+<a id="simplicity" class="anchor" href="#simplicity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simplicity</h2>
+
+<p>During the development of the Nucleus the primary goal was to create an MVP solution for Android with "Keep It Stupid Simple" in mind. There are about 15Kb of <code>nucleus.jar</code> that does all the job.</p>
+
+<p>If you're familiar with the Mortar library then You will find a lot of common. However, Nucleus requires you to write less code. You can use the Dagger for your dependencies, but it is not used for instantiating a Presenter.</p>
+
+<p>One of the shining features of the Nucleus is its Model part of the MVP. While other MVP solutions are, in fact, 'View-Presenter', leaving Presenter without support from the back side.</p>
+
+<h3>
+<a id="hello-world" class="anchor" href="#hello-world" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hello world</h3>
+
+<pre><code>public class MainActivity extends NucleusActivity&lt;MainPresenter&gt; {
+    @Override
+    public MainPresenter createPresenter() {
+        return new MainPresenter();
+    }
+}
+
+public class MainPresenter extends Presenter&lt;MainActivity&gt; {
+    @Override
+    protected void onTakeView(MainActivity view) {
+        view.setTitle("Hello, MVP world!");
+    }
+}
+</code></pre>
+
+<p>If You care about your existing Activity class tree - You don't have to use the NucleusActivity class. You can just copy-paste NucleusActivity's code.</p>
+
+<h3>
+<a id="loader" class="anchor" href="#loader" aria-hidden="true"><span class="octicon octicon-link"></span></a>Loader</h3>
+
+<p>A simple class that provides a Presenter with data when available. It implements the <a href="http://en.wikipedia.org/wiki/Observer_pattern">Observer</a> and the <a href="http://en.wikipedia.org/wiki/Adapter_pattern">Adapter</a> patterns the same time. It adopts different ways of getting data (database, network, cache etc) to fit Nucleus and Android components lifecycle.</p>
+
+<pre><code>public abstract class Loader&lt;ResultType&gt; {
+
+    public interface Receiver&lt;ResultType&gt; {
+        void onLoadComplete(Loader&lt;ResultType&gt; loader, ResultType data);
+    }
+
+    public void register(Receiver&lt;ResultType&gt; receiver);
+    public void unregister(Receiver&lt;ResultType&gt; receiver);
+    protected void notifyReceivers(ResultType data);
+}
+</code></pre>
+
+<p>A typical Nucleus application subclasses at least one Loader. Subclassing the Loader allows to avoid a boilerplate code in the future. Example: <a href="https://github.com/konmik/nucleus/blob/master/nucleus-example/src/main/java/nucleus/example/network/RetrofitLoader.java">RetrofitLoader</a>.</p>
+
+<h2>
+<a id="complexity" class="anchor" href="#complexity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Complexity</h2>
+
+<p><strong>A complex task requires a complex solution. Or not?</strong></p>
+
+<p>Most of the time you just need to pass some data from a Model to a View, making a couple of checks and preparations for the View to make it completely Model-independent. </p>
+
+<p>You don't want to deal with register/unregister to asynchronous data requests, you don't want to check if a view is exist or it is being recreating right now, you don't want to check if a data from all of required loaders is ready to be presented, etc. All of that are typical tasks. To be short: you don't want to create a boilerplate code. So here is the LoadBroker class that will do all of that for you.</p>
+
+<ul>
+<li>A <strong>Broker</strong> is used to connect a Presenter with a View.</li>
+<li>A <strong>LoadBroker</strong> is used to connect a Model with a View.</li>
+</ul>
+
+<p>You can think of a Broker as a helping class inside of a Presenter.</p>
+
+<h3>
+<a id="loadbroker" class="anchor" href="#loadbroker" aria-hidden="true"><span class="octicon octicon-link"></span></a>LoadBroker</h3>
+
+<p><img src="nucleus-images/nucleus_2.png" alt=""></p>
+
+<ul>
+<li>
+<strong>Loader</strong> - Passes data when available</li>
+<li>
+<strong>Presenter</strong> - Subscribes to loaders, publishes data when all data from loaders is available and a View is available.
+Re-publishes data when the View is being recreated or when new data is available from Loaders.</li>
+<li>
+<strong>View</strong> - Just shows data</li>
+</ul>
+
+<p>How complex a Presenter's code should be?</p>
+
+<pre><code>public class MainPresenter extends Presenter&lt;MainActivity&gt; {
+
+    @Override
+    public void onCreate(Bundle savedState) {
+        addViewBroker(new LoaderBroker&lt;MainActivity&gt;(itemsLoader) {
+            @Override
+            protected void onPresent(MainActivity view, boolean complete) {
+                view.publishItems(this.getData(itemsLoader));
+            }
+        });
+
+        itemsLoader.request();
+    }
+}
+</code></pre>
+
+<p><strong>LoadBroker</strong> reduces a boilerplate code, doing all subscribe/unsubscribe job for you.</p>
+
+<p><img src="nucleus-images/broker.png" alt=""></p>
+
+<h2>
+<a id="custom-presenters-typical-lifecycle" class="anchor" href="#custom-presenters-typical-lifecycle" aria-hidden="true"><span class="octicon octicon-link"></span></a>Custom presenter's typical lifecycle</h2>
+
+<p>Sometimes it is not enough just to publish a data</p>
+
+<pre><code>public class MyPresenter extends Presenter&lt;ViewType&gt; {
+    @Override
+    protected void onCreate(Bundle savedState) {
+        // initialize the presenter, start background tasks
+    }
+
+    @Override
+    protected void onTakeView(ViewType view) {
+        // publish some data when a view is attached to the presenter.
+    }
+
+    // Use getView() to check availability of a view when receiving a background task result.
+
+    @Override
+    protected void onDestroy() {
+        // free resources, unsubscribe and cancel background tasks when a user exits a view
+    }
+}
+</code></pre>
+
+<h1>
+<a id="more-features" class="anchor" href="#more-features" aria-hidden="true"><span class="octicon octicon-link"></span></a>More Features</h1>
+
+<ul>
+<li><p><strong>Nested presenters</strong> - you can have your MVP-driven Views to be reused in a different application areas, just override parent presenter's onTakePresenter instead of onTakeView to take control over nested presenter. Or just use Presenter.addPresenterBroker.</p></li>
+<li><p><strong>Smart save/restore</strong> - Presenter gets its view AFTER the view has been completely restored and attached to an Activity. This allows to use View's ability to save and restore its state. It is also extremely useful when dealing with user input such as EditText.</p></li>
+</ul>
+
+<h1>
+<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to use</h1>
+
+<ul>
+<li>Clone the GitHub <a href="https://github.com/konmik/nucleus">repository</a>
+</li>
+<li>Run <code>mvn clean install</code> to install it to your local repository</li>
+<li>Maven dependency</li>
+</ul>
+
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;info.android15.nucleus&lt;/groupId&gt;
+    &lt;artifactId&gt;nucleus&lt;/artifactId&gt;
+    &lt;version&gt;0.1-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/konmik/nucleus/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/konmik/nucleus/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/konmik/nucleus"></a> is maintained by <a href="https://github.com/konmik">konmik</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
     </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Nucleus maintained by <a href="https://github.com/konmik">konmik</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
+  
   </body>
 </html>
