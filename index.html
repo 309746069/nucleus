@@ -1,42 +1,45 @@
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <meta name="description" content="Nucleus : Nucleus is an Android library which helps to use the Model-View-Presenter pattern">
 
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>Nucleus by konmik</title>
+    <title>Nucleus</title>
   </head>
 
   <body>
-    <header>
-      <div class="inner">
-        <h1>Nucleus</h1>
-        <h2>Nucleus is an Android library which helps to use the Model-View-Presenter pattern</h2>
-        <a href="https://github.com/konmik/nucleus" class="button"><small>View project on</small> GitHub</a>
-      </div>
-    </header>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h3>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/konmik/nucleus">View on GitHub</a>
+
+          <h1 id="project_title">Nucleus</h1>
+          <h2 id="project_tagline">Nucleus is an Android library which helps to use the Model-View-Presenter pattern</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/konmik/nucleus/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/konmik/nucleus/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>
 <a id="the-model-view-presenter-pattern" class="anchor" href="#the-model-view-presenter-pattern" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Model-View-Presenter pattern</h3>
 
 <ul>
 <li>
-<strong>Model</strong> is a data access layer such as a database api or a remote server api.</li>
+<strong>Model</strong> is a data access layer such as a database API or a remote server API.</li>
 <li>
 <strong>View</strong> is a layer that displays data and reacts to user actions.
-On Android this could be an Activity or an android.view.View.</li>
+On Android, this could be an Activity or an android.view.View.</li>
 <li>
 <strong>Presenter</strong> is a layer that provides View with data from the Model.
 Presenter is doing job related to background tasks and data changes.</li>
@@ -52,7 +55,7 @@ Presenter is doing job related to background tasks and data changes.</li>
 
 <p><a href="http://corner.squareup.com/2014/10/advocating-against-android-fragments.html">Advocating Against Android Fragments</a></p>
 
-<p><a href="https://github.com/square/mortar">mortar</a></p>
+<p><a href="https://github.com/square/mortar">Mortar</a></p>
 
 <p><a href="http://people.apache.org/%7Efhanik/kiss.html">Keep It Stupid Simple</a></p>
 
@@ -61,24 +64,24 @@ Presenter is doing job related to background tasks and data changes.</li>
 
 <ul>
 <li>Android development is View-centric</li>
-<li>View can not be considered as a point of stability for an application because of its nonpermanent nature</li>
+<li>View cannot be considered as a point of stability for an application because of its nonpermanent nature</li>
 <li>Most of the modern Android applications just use View-Model architecture</li>
 <li>Programmers are involved into fight with View complexities instead of solving business tasks</li>
 </ul>
 
-<p>Using only Model-View in your application you usually end up with "everything is connected with everything".</p>
+<p>Using only Model-View in your application, you usually end up with "everything is connected with everything".</p>
 
 <p><img src="nucleus-images/everything_is_connected_with_everything.png" alt=""></p>
 
-<p>If this diagram does not look complex then think about each arrow shows asynchronous data transfer. Each View 
-can disappear and can be recreated at random time. Don't forget about saving/restoring of Views.
+<p>If this diagram does not look complex, then think about each arrow shows asynchronous data transfer. Each View 
+can disappear and appear at random time. Do not forget about saving/restoring of Views.
 Attach a couple of background threads to that nonpermanent Views, and the cake is ready!</p>
 
-<p>An alternative to the "everything is connected with everything" is the God object.</p>
+<p>An alternative to the "everything is connected with everything" is a God object.</p>
 
 <p><img src="nucleus-images/a_god_object.png" alt=""></p>
 
-<p>The God object is overcomplicated, its parts can not be reused, tested or easily refactored.</p>
+<p>A God object is overcomplicated; its parts cannot be reused, tested or easily refactored.</p>
 
 <h1>
 <a id="solution-mvc" class="anchor" href="#solution-mvc" aria-hidden="true"><span class="octicon octicon-link"></span></a>Solution: MVC</h1>
@@ -101,20 +104,25 @@ but I would advise you against doing that.</p>
 for Android with "Keep It Stupid Simple" in mind.
 There are about 15Kb of <code>nucleus.jar</code> that do all the job.</p>
 
-<p>If you're familiar with the Mortar library you will find a lot of common.
+<p>If you are familiar with the Mortar library you will find a lot of common.
 However, Nucleus requires you to write less code. You can use the Dagger for your dependencies,
 but it is not used for instantiating a Presenter.</p>
 
 <p>One of the shining features of the Nucleus is its Model part of the MVP.
-Other MVP solutions are, in fact, 'View-Presenter', and leave Presenter without support from the back side.</p>
+Other MVP solutions are, in fact, 'View-Presenter', and leave Presenter without support from the backside.</p>
 
 <h3>
 <a id="hello-world" class="anchor" href="#hello-world" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hello world</h3>
 
 <pre><code>public class MainActivity extends NucleusActivity&lt;MainPresenter&gt; {
     @Override
-    public MainPresenter createPresenter() {
-        return new MainPresenter();
+    protected PresenterCreator&lt;MainPresenter&gt; getPresenterCreator() {
+        return new PresenterCreator&lt;MainPresenter&gt;() {
+            @Override
+            public MainPresenter createPresenter() {
+                return new MainPresenter();
+            }
+        };
     }
 }
 
@@ -126,7 +134,7 @@ public class MainPresenter extends Presenter&lt;MainActivity&gt; {
 }
 </code></pre>
 
-<p>If You care about your existing Activity class tree - you don't have to use the 
+<p>If you care about your existing Activity class tree - you don't have to use the 
 NucleusActivity class. You can just copy-paste NucleusActivity's code.</p>
 
 <h3>
@@ -135,7 +143,7 @@ NucleusActivity class. You can just copy-paste NucleusActivity's code.</p>
 <p>Loader is a simple class that provides a Presenter with data when the data is available. 
 It implements the <a href="http://en.wikipedia.org/wiki/Observer_pattern">Observer</a> and
 the <a href="http://en.wikipedia.org/wiki/Adapter_pattern">Adapter</a> patterns at the same time.
-It adopts different ways of getting data (database api, network api, cache api etc) to fit
+It adopts different ways of getting data (database API, network API, cache API etc.) to fit
 Nucleus and Android components' lifecycle.</p>
 
 <pre><code>public abstract class Loader&lt;ResultType&gt; {
@@ -157,7 +165,7 @@ Example: <a href="https://github.com/konmik/nucleus/blob/master/nucleus-example/
 <h1>
 <a id="complexity" class="anchor" href="#complexity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Complexity</h1>
 
-<p><strong>A complex task requires a complex solution. Or not?</strong></p>
+<p><strong>A complex task requires a complex solution... or not?</strong></p>
 
 <p>Most of the time you just need to pass some data from a Model to a View, making a couple of 
 checks and preparations for the View to make it completely Model-independent. </p>
@@ -243,7 +251,7 @@ Re-publishes data when the View has been recreated or when new data is available
 <ul>
 <li><p><strong>Nested presenters</strong> - you can reuse your MVP-driven Views in different application areas,
 just override parent presenter's onTakePresenter instead of onTakeView to take control over
-the nested presenter. Or just use Presenter.addPresenterBroker.</p></li>
+the nested presenter. Alternatively, use the Presenter.addPresenterBroker.</p></li>
 <li><p><strong>Smart save/restore</strong> - Presenter gets its view AFTER the view has been completely restored 
 and attached to an Activity. This allows to use View's ability to save and restore its state. 
 It is also extremely useful when dealing with user input such as EditText.</p></li>
@@ -265,25 +273,35 @@ It is also extremely useful when dealing with user input such as EditText.</p></
     &lt;version&gt;0.1-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;
 </code></pre>
-        </section>
 
-        <aside id="sidebar">
-          <a href="https://github.com/konmik/nucleus/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/konmik/nucleus/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
+<h3>
+<a id="compiled" class="anchor" href="#compiled" aria-hidden="true"><span class="octicon octicon-link"></span></a>Compiled</h3>
 
-          <p class="repo-owner"><a href="https://github.com/konmik/nucleus"></a> is maintained by <a href="https://github.com/konmik">konmik</a>.</p>
+<ul>
+<li><a href="downloads/nucleus-example.apk">nucleus-example.apk</a></li>
+<li><a href="downloads/nucleus-0.1-SNAPSHOT.jar">nucleus-0.1-SNAPSHOT.jar</a></li>
+</ul>
 
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
+<h1>
+<a id="future-releases" class="anchor" href="#future-releases" aria-hidden="true"><span class="octicon octicon-link"></span></a>Future releases</h1>
+
+<ul>
+<li>nucleus-loaders artifact with implementation for Retrofit+DiskCache, OrmLite and RxJava loaders</li>
+<li>Additional tests</li>
+<li>Improved example</li>
+</ul>
+      </section>
     </div>
 
-  
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Nucleus maintained by <a href="https://github.com/konmik">konmik</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
   </body>
 </html>
