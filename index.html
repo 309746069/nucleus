@@ -1,36 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Nucleus : Nucleus is an Android library which helps to use the Model-View-Presenter pattern">
+    <title>Nucleus by konmik</title>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Nucleus</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
-
   <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Nucleus</h1>
+        <p class="header">Nucleus is an Android library which helps to use the Model-View-Presenter pattern</p>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/konmik/nucleus">View on GitHub</a>
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/konmik/nucleus/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/konmik/nucleus/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/konmik/nucleus">View On GitHub</a></li>
+        </ul>
 
-          <h1 id="project_title">Nucleus</h1>
-          <h2 id="project_tagline">Nucleus is an Android library which helps to use the Model-View-Presenter pattern</h2>
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/konmik">konmik</a></p>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/konmik/nucleus/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/konmik/nucleus/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
+      </header>
+      <section>
         <h3>
 <a id="the-model-view-presenter-pattern" class="anchor" href="#the-model-view-presenter-pattern" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Model-View-Presenter pattern</h3>
 
@@ -102,7 +101,8 @@ but I would advise you against doing that.</p>
 
 <p>During the development of the Nucleus the primary goal was to create an MVP solution 
 for Android with "Keep It Stupid Simple" in mind.
-There are about 15Kb of <code>nucleus.jar</code> that do all the job.</p>
+There are about 15Kb of <code>nucleus.jar</code> that do all the job.
+(Update: it is 29Kb now but now we have RxJava support!)</p>
 
 <p>If you are familiar with the Mortar library you will find a lot of common.
 However, Nucleus requires you to write less code. You can use the Dagger for your dependencies,
@@ -206,12 +206,10 @@ Re-publishes data when the View has been recreated or when new data is available
     public void onCreate(Bundle savedState) {
         addViewBroker(new LoaderBroker&lt;MainActivity&gt;(itemsLoader) {
             @Override
-            protected void onPresent(MainActivity view, boolean complete) {
-                view.publishItems(this.getData(itemsLoader));
+            protected void onPresent(MainActivity view) {
+                view.publishItems(getData(itemsLoader));
             }
         });
-
-        itemsLoader.request();
     }
 }
 </code></pre>
@@ -255,53 +253,55 @@ the nested presenter. Alternatively, use the Presenter.addPresenterBroker.</p></
 <li><p><strong>Smart save/restore</strong> - Presenter gets its view AFTER the view has been completely restored 
 and attached to an Activity. This allows to use View's ability to save and restore its state. 
 It is also extremely useful when dealing with user input such as EditText.</p></li>
+<li><p><strong>RxJava support</strong> - version 0.2 comes with RxJava support - use RxPresenter.</p></li>
 </ul>
 
 <h1>
 <a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to use</h1>
 
 <ul>
-<li>Clone the GitHub <a href="https://github.com/konmik/nucleus">repository</a>
-</li>
-<li>Run <code>mvn clean install</code> to install the Nucleus to your local repository</li>
-<li>Dependency:</li>
+<li>Maven dependency:</li>
 </ul>
 
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;info.android15.nucleus&lt;/groupId&gt;
-    &lt;artifactId&gt;nucleus&lt;/artifactId&gt;
-    &lt;version&gt;0.1-SNAPSHOT&lt;/version&gt;
-&lt;/dependency&gt;
+<pre><code>&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;info.android15.nucleus&lt;/groupId&gt;
+        &lt;artifactId&gt;nucleus&lt;/artifactId&gt;
+        &lt;version&gt;0.2&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+
+<ul>
+<li>Gradle dependency:</li>
+</ul>
+
+<pre><code>dependencies {
+    compile 'info.android15.nucleus:nucleus:0.2'
+}
 </code></pre>
 
 <h3>
-<a id="compiled" class="anchor" href="#compiled" aria-hidden="true"><span class="octicon octicon-link"></span></a>Compiled</h3>
+<a id="compiled-example" class="anchor" href="#compiled-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Compiled example</h3>
 
 <ul>
-<li><a href="downloads/nucleus-example.apk">nucleus-example.apk</a></li>
-<li><a href="downloads/nucleus-0.1-SNAPSHOT.jar">nucleus-0.1-SNAPSHOT.jar</a></li>
+<li><a href="https://repo1.maven.org/maven2/info/android15/nucleus/nucleus-example/0.2/nucleus-example-0.2.apk">nucleus-example-0.2.apk</a></li>
 </ul>
 
 <h1>
 <a id="future-releases" class="anchor" href="#future-releases" aria-hidden="true"><span class="octicon octicon-link"></span></a>Future releases</h1>
 
 <ul>
-<li>nucleus-loaders artifact with implementation for Retrofit+DiskCache, OrmLite and RxJava loaders</li>
 <li>Additional tests</li>
 <li>Improved example</li>
+<li>Contact me if you need more! sirstripy-at-gmail.com</li>
 </ul>
       </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Nucleus maintained by <a href="https://github.com/konmik">konmik</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
       </footer>
     </div>
-
-    
-
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
   </body>
 </html>
