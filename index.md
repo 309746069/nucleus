@@ -56,6 +56,7 @@ but I would advise you against doing that.
 During the development of the Nucleus the primary goal was to create an MVP solution 
 for Android with "Keep It Stupid Simple" in mind.
 There are about 15Kb of `nucleus.jar` that do all the job.
+(Update: it is 29Kb but we have RxJava support now!)
 
 If you are familiar with the Mortar library you will find a lot of common.
 However, Nucleus requires you to write less code. You can use the Dagger for your dependencies,
@@ -146,12 +147,10 @@ How complex a Presenter's code should be?
         public void onCreate(Bundle savedState) {
             addViewBroker(new LoaderBroker<MainActivity>(itemsLoader) {
                 @Override
-                protected void onPresent(MainActivity view, boolean complete) {
-                    view.publishItems(this.getData(itemsLoader));
+                protected void onPresent(MainActivity view) {
+                    view.publishItems(getData(itemsLoader));
                 }
             });
-
-            itemsLoader.request();
         }
     }
 
@@ -192,18 +191,31 @@ the nested presenter. Alternatively, use the Presenter.addPresenterBroker.
 and attached to an Activity. This allows to use View's ability to save and restore its state. 
 It is also extremely useful when dealing with user input such as EditText.
 
+* **RxJava support** - version 0.2 comes with RxJava support - use RxPresenter.
+
 # How to use
 
-* Clone the GitHub [repository](https://github.com/konmik/nucleus)
-* Run `mvn clean install` to install the Nucleus to your local repository
-* Dependency:
+* Maven dependency:
 ```
-<dependency>
-    <groupId>info.android15.nucleus</groupId>
-    <artifactId>nucleus</artifactId>
-    <version>0.1-SNAPSHOT</version>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>info.android15.nucleus</groupId>
+        <artifactId>nucleus</artifactId>
+        <version>0.2</version>
+    </dependency>
+</dependencies>
 ```
+
+* Gradle dependency:
+
+```
+dependencies {
+    compile 'info.android15.nucleus:nucleus:0.2'
+}
+```
+
+### Compiled example
+* [nucleus-example-0.2.apk](https://repo1.maven.org/maven2/info/android15/nucleus/nucleus-example/0.2/nucleus-example-0.2.apk)
 
 # Future releases
 
