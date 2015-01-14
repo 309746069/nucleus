@@ -35,12 +35,12 @@
 
 <ul>
 <li>
-<strong>Model</strong> is a data access layer such as a database API or a remote server API.</li>
-<li>
 <strong>View</strong> is a layer that displays data and reacts to user actions.
-On Android, this could be an Activity or an android.view.View.</li>
+On Android, this could be Activity or android.view.View.</li>
 <li>
-<strong>Presenter</strong> is a layer that provides View with data from the Model.
+<strong>Model</strong> is a data access layer such as database API or remote server API.</li>
+<li>
+<strong>Presenter</strong> is a layer that provides View with data from Model.
 Presenter is doing job related to background tasks and data changes.</li>
 </ul>
 
@@ -68,7 +68,7 @@ Presenter is doing job related to background tasks and data changes.</li>
 <li>Programmers are involved into fight with View complexities instead of solving business tasks</li>
 </ul>
 
-<p>Using only Model-View in your application, you usually end up with "everything is connected with everything".</p>
+<p>Using only Model-View in your application you usually end up with "everything is connected with everything".</p>
 
 <p><img src="nucleus-images/everything_is_connected_with_everything.png" alt=""></p>
 
@@ -76,11 +76,11 @@ Presenter is doing job related to background tasks and data changes.</li>
 can disappear and appear at random time. Do not forget about saving/restoring of Views.
 Attach a couple of background threads to that nonpermanent Views, and the cake is ready!</p>
 
-<p>An alternative to the "everything is connected with everything" is a God object.</p>
+<p>An alternative to the "everything is connected with everything" is a god object.</p>
 
 <p><img src="nucleus-images/a_god_object.png" alt=""></p>
 
-<p>A God object is overcomplicated; its parts cannot be reused, tested or easily refactored.</p>
+<p>A god object is overcomplicated; its parts cannot be reused, tested or easily refactored.</p>
 
 <h1>
 <a id="solution-mvc" class="anchor" href="#solution-mvc" aria-hidden="true"><span class="octicon octicon-link"></span></a>Solution: MVC</h1>
@@ -88,28 +88,27 @@ Attach a couple of background threads to that nonpermanent Views, and the cake i
 <p><img src="nucleus-images/mvp.png" alt=""></p>
 
 <ul>
+<li>Background tasks persist despite of configuration changes (don't have to check if such task is already running,
+no double task runs, no memory leaks - all happens naturally)</li>
 <li>Complex tasks are split into simpler tasks and are easier to solve</li>
 <li>Less code, less bugs, easier to debug</li>
 <li>Testable</li>
 </ul>
 
-<p>With Nucleus You can use an Activity or a custom Layout to be your View in MVP. You can extend the Fragment class
-but I would advise you against doing that.</p>
-
 <h1>
 <a id="simplicity" class="anchor" href="#simplicity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simplicity</h1>
 
-<p>During the development of the Nucleus the primary goal was to create an MVP solution 
+<p>During the development of Nucleus the primary goal was to create an MVP solution 
 for Android with "Keep It Stupid Simple" in mind.
 There are about 15Kb of <code>nucleus.jar</code> that do all the job.
-(Update: it is 29Kb now but now we have RxJava support!)</p>
+(0.2 update: it is 29Kb now but now we have RxJava support!)</p>
 
-<p>If you are familiar with the Mortar library you will find a lot of common.
-However, Nucleus requires you to write less code. You can use the Dagger for your dependencies,
+<p>If you are familiar with Mortar, you will find a lot of common.
+However, Nucleus requires you to write less code. You can use Dagger for your dependencies,
 but it is not used for instantiating a Presenter.</p>
 
-<p>One of the shining features of the Nucleus is its Model part of the MVP.
-Other MVP solutions are, in fact, 'View-Presenter', and leave Presenter without support from the backside.</p>
+<p>One of the shining features of Nucleus is its Model part of the MVP.
+Other MVP solutions are, in fact 'View-Presenter', and leave Presenter without support from the backside.</p>
 
 <h3>
 <a id="hello-world" class="anchor" href="#hello-world" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hello world</h3>
@@ -134,15 +133,15 @@ public class MainPresenter extends Presenter&lt;MainActivity&gt; {
 }
 </code></pre>
 
-<p>If you care about your existing Activity class tree - you don't have to use the 
-NucleusActivity class. You can just copy-paste NucleusActivity's code.</p>
+<p>If you care about your existing Activity class tree - you don't need to use
+NucleusActivity class, just copy-paste NucleusActivity's code.</p>
 
 <h3>
 <a id="loader" class="anchor" href="#loader" aria-hidden="true"><span class="octicon octicon-link"></span></a>Loader</h3>
 
 <p>Loader is a simple class that provides a Presenter with data when the data is available. 
-It implements the <a href="http://en.wikipedia.org/wiki/Observer_pattern">Observer</a> and
-the <a href="http://en.wikipedia.org/wiki/Adapter_pattern">Adapter</a> patterns at the same time.
+It implements <a href="http://en.wikipedia.org/wiki/Observer_pattern">Observer</a> and
+<a href="http://en.wikipedia.org/wiki/Adapter_pattern">Adapter</a> patterns at the same time.
 It adopts different ways of getting data (database API, network API, cache API etc.) to fit
 Nucleus and Android components' lifecycle.</p>
 
@@ -158,9 +157,11 @@ Nucleus and Android components' lifecycle.</p>
 }
 </code></pre>
 
-<p>A typical Nucleus application subclasses at least one Loader. Subclassing the Loader allows 
+<p>A typical Nucleus application subclasses Loader at least once. Subclassing Loader allows 
 to avoid a boilerplate code in the future. 
 Example: <a href="https://github.com/konmik/nucleus/blob/master/nucleus-example/src/main/java/nucleus/example/network/RetrofitLoader.java">RetrofitLoader</a>.</p>
+
+<p>It is also possible to use RxJava for Model, see below.</p>
 
 <h1>
 <a id="complexity" class="anchor" href="#complexity" aria-hidden="true"><span class="octicon octicon-link"></span></a>Complexity</h1>
@@ -173,15 +174,19 @@ checks and preparations for the View to make it completely Model-independent. </
 <p>You don't want to deal with registering/unregistering to loaders,
 you don't want to check if a view exists or it is being recreated right now,
 you don't want to check if data from all required loaders is ready to be presented, etc.
-All of these are typical tasks. To be short: you don't want to create a boilerplate code.
-So here is the LoadBroker class that will do all of that for you.</p>
+All of these are typical tasks. </p>
+
+<p>To be short: you don't want to create a boilerplate code.
+So here is LoadBroker class that will do all of that for you.</p>
 
 <ul>
-<li>A <strong>Broker</strong> is used to connect a Presenter with a View.</li>
-<li>A <strong>LoadBroker</strong> is used to connect a Model with a View.</li>
+<li>
+<strong>Broker</strong> is used to connect a Presenter with a View.</li>
+<li>
+<strong>LoadBroker</strong> is used to connect a Model with a View.</li>
 </ul>
 
-<p>You can think of Broker as a helping class inside of a Presenter.</p>
+<p>You can think of Broker as a helping class inside of Presenter.</p>
 
 <h3>
 <a id="loadbroker" class="anchor" href="#loadbroker" aria-hidden="true"><span class="octicon octicon-link"></span></a>LoadBroker</h3>
@@ -190,18 +195,17 @@ So here is the LoadBroker class that will do all of that for you.</p>
 
 <ul>
 <li>
-<strong>Loader</strong> - Passes data when available</li>
-<li>
-<strong>Presenter</strong> - Registers to loaders, publishes data when all data from loaders is available and a View is available.
-Re-publishes data when the View has been recreated or when new data is available from Loaders.</li>
+<strong>Loader</strong> - Just passes data when data is available</li>
 <li>
 <strong>View</strong> - Just shows data</li>
+<li>
+<strong>Presenter</strong> - Registers to loaders, publishes data when all data from loaders is available and a view is available.
+Re-publishes data when the view has been recreated or when new data is available from loaders.</li>
 </ul>
 
-<p>How complex a Presenter's code should be?</p>
+<p>How complex the Presenter's code should be?</p>
 
 <pre><code>public class MainPresenter extends Presenter&lt;MainActivity&gt; {
-
     @Override
     public void onCreate(Bundle savedState) {
         addViewBroker(new LoaderBroker&lt;MainActivity&gt;(itemsLoader) {
@@ -214,14 +218,29 @@ Re-publishes data when the View has been recreated or when new data is available
 }
 </code></pre>
 
-<p><strong>LoadBroker</strong> reduces a boilerplate code - it does all register/unregister job for you.</p>
+<p><strong>LoadBroker</strong> does all register/unregister job for you.</p>
 
 <p><img src="nucleus-images/broker.png" alt=""></p>
+
+<p>RxJava variant:</p>
+
+<pre><code>public class MainPresenter extends RxPresenter&lt;MainActivity&gt; {
+    @Override
+    public void onCreate(Bundle savedState) {
+        addRxViewBroker(items.load(), new Action2&lt;List&lt;Item&gt;, MainActivity&gt;() {
+            @Override
+            public void call(List&lt;Item&gt; items, MainActivity view) {
+                view.publishItems(items);
+            }
+        });
+    }
+}
+</code></pre>
 
 <h3>
 <a id="custom-presenters-typical-lifecycle" class="anchor" href="#custom-presenters-typical-lifecycle" aria-hidden="true"><span class="octicon octicon-link"></span></a>Custom presenter's typical lifecycle</h3>
 
-<p>Sometimes it is not enough just to publish a data.</p>
+<p>Sometimes it is not enough just to publish data.</p>
 
 <pre><code>public class MyPresenter extends Presenter&lt;ViewType&gt; {
     @Override
@@ -234,11 +253,11 @@ Re-publishes data when the View has been recreated or when new data is available
         // publish some data when a view is attached to the presenter.
     }
 
-    // Use getView() to check availability of a view when receiving a background task result.
+    // Use getView() to check availability of the view when receiving a background task result.
 
     @Override
     protected void onDestroy() {
-        // free resources, unregister and cancel background tasks when a user exits a view
+        // free resources, unregister and cancel background tasks when a user exits the view
     }
 }
 </code></pre>
@@ -247,13 +266,12 @@ Re-publishes data when the View has been recreated or when new data is available
 <a id="more-features" class="anchor" href="#more-features" aria-hidden="true"><span class="octicon octicon-link"></span></a>More Features</h1>
 
 <ul>
-<li><p><strong>Nested presenters</strong> - you can reuse your MVP-driven Views in different application areas,
-just override parent presenter's onTakePresenter instead of onTakeView to take control over
-the nested presenter. Alternatively, use the Presenter.addPresenterBroker.</p></li>
+<li><p><strong>Nested, reusable presenters</strong> - you can reuse your MVP-driven Views in different application areas,
+just override parent presenter's onTakePresenter instead of onTakeView if you need to take control over
+the nested presenter. Alternatively, use Presenter.addPresenterBroker.</p></li>
 <li><p><strong>Smart save/restore</strong> - Presenter gets its view AFTER the view has been completely restored 
 and attached to an Activity. This allows to use View's ability to save and restore its state. 
 It is also extremely useful when dealing with user input such as EditText.</p></li>
-<li><p><strong>RxJava support</strong> - version 0.2 comes with RxJava support - use RxPresenter.</p></li>
 </ul>
 
 <h1>
@@ -294,8 +312,12 @@ It is also extremely useful when dealing with user input such as EditText.</p></
 <ul>
 <li>Additional tests</li>
 <li>Improved example</li>
-<li>Contact me if you need more! sirstripy-at-gmail.com</li>
 </ul>
+
+<h1>
+<a id="feel-free-to-contact-me" class="anchor" href="#feel-free-to-contact-me" aria-hidden="true"><span class="octicon octicon-link"></span></a>Feel free to contact me</h1>
+
+<p>sirstripy-at-gmail.com</p>
       </section>
       <footer>
         <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
