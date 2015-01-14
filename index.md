@@ -1,9 +1,9 @@
 ### The Model-View-Presenter pattern
 
-* **Model** is a data access layer such as a database API or a remote server API.
 * **View** is a layer that displays data and reacts to user actions.
-On Android, this could be an Activity or an android.view.View.
-* **Presenter** is a layer that provides View with data from the Model.
+On Android, this could be Activity or android.view.View.
+* **Model** is a data access layer such as database API or remote server API.
+* **Presenter** is a layer that provides View with data from Model.
 Presenter is doing job related to background tasks and data changes.
 
 ![](nucleus-images/nucleus_1.png)
@@ -26,7 +26,7 @@ More on MVP you can find at
 * Most of the modern Android applications just use View-Model architecture
 * Programmers are involved into fight with View complexities instead of solving business tasks
 
-Using only Model-View in your application, you usually end up with "everything is connected with everything".
+Using only Model-View in your application you usually end up with "everything is connected with everything".
 
 ![](nucleus-images/everything_is_connected_with_everything.png)
 
@@ -34,36 +34,35 @@ If this diagram does not look complex, then think about each arrow shows asynchr
 can disappear and appear at random time. Do not forget about saving/restoring of Views.
 Attach a couple of background threads to that nonpermanent Views, and the cake is ready!
 
-An alternative to the "everything is connected with everything" is a God object.
+An alternative to the "everything is connected with everything" is a god object.
 
 ![](nucleus-images/a_god_object.png)
 
-A God object is overcomplicated; its parts cannot be reused, tested or easily refactored.
+A god object is overcomplicated; its parts cannot be reused, tested or easily refactored.
 
 # Solution: MVC
 
 ![](nucleus-images/mvp.png)
 
+* Background tasks persist despite of configuration changes (don't have to check if such task is already running,
+no double task runs, no memory leaks - all happens naturally)
 * Complex tasks are split into simpler tasks and are easier to solve
 * Less code, less bugs, easier to debug
 * Testable
 
-With Nucleus You can use an Activity or a custom Layout to be your View in MVP. You can extend the Fragment class
-but I would advise you against doing that.
-
 # Simplicity
 
-During the development of the Nucleus the primary goal was to create an MVP solution 
+During the development of Nucleus the primary goal was to create an MVP solution 
 for Android with "Keep It Stupid Simple" in mind.
 There are about 15Kb of `nucleus.jar` that do all the job.
-(Update: it is 29Kb but we have RxJava support now!)
+(0.2 update: it is 29Kb now but now we have RxJava support!)
 
-If you are familiar with the Mortar library you will find a lot of common.
-However, Nucleus requires you to write less code. You can use the Dagger for your dependencies,
+If you are familiar with Mortar, you will find a lot of common.
+However, Nucleus requires you to write less code. You can use Dagger for your dependencies,
 but it is not used for instantiating a Presenter.
 
-One of the shining features of the Nucleus is its Model part of the MVP.
-Other MVP solutions are, in fact, 'View-Presenter', and leave Presenter without support from the backside.
+One of the shining features of Nucleus is its Model part of the MVP.
+Other MVP solutions are, in fact 'View-Presenter', and leave Presenter without support from the backside.
 
 ### Hello world
 
@@ -86,14 +85,14 @@ Other MVP solutions are, in fact, 'View-Presenter', and leave Presenter without 
         }
     }
 
-If you care about your existing Activity class tree - you don't have to use the 
-NucleusActivity class. You can just copy-paste NucleusActivity's code.
+If you care about your existing Activity class tree - you don't need to use
+NucleusActivity class, just copy-paste NucleusActivity's code.
 
 ### Loader
 
 Loader is a simple class that provides a Presenter with data when the data is available. 
-It implements the [Observer](http://en.wikipedia.org/wiki/Observer_pattern) and
-the [Adapter](http://en.wikipedia.org/wiki/Adapter_pattern) patterns at the same time.
+It implements [Observer](http://en.wikipedia.org/wiki/Observer_pattern) and
+[Adapter](http://en.wikipedia.org/wiki/Adapter_pattern) patterns at the same time.
 It adopts different ways of getting data (database API, network API, cache API etc.) to fit
 Nucleus and Android components' lifecycle.
 
@@ -108,9 +107,11 @@ Nucleus and Android components' lifecycle.
         protected void notifyReceivers(ResultType data);
     }
 
-A typical Nucleus application subclasses at least one Loader. Subclassing the Loader allows 
+A typical Nucleus application subclasses Loader at least once. Subclassing Loader allows 
 to avoid a boilerplate code in the future. 
 Example: [RetrofitLoader](https://github.com/konmik/nucleus/blob/master/nucleus-example/src/main/java/nucleus/example/network/RetrofitLoader.java).
+
+It is also possible to use RxJava for Model, see below.
 
 # Complexity
 
@@ -122,27 +123,28 @@ checks and preparations for the View to make it completely Model-independent.
 You don't want to deal with registering/unregistering to loaders,
 you don't want to check if a view exists or it is being recreated right now,
 you don't want to check if data from all required loaders is ready to be presented, etc.
-All of these are typical tasks. To be short: you don't want to create a boilerplate code.
-So here is the LoadBroker class that will do all of that for you.
+All of these are typical tasks. 
 
-* A **Broker** is used to connect a Presenter with a View.
-* A **LoadBroker** is used to connect a Model with a View.
+To be short: you don't want to create a boilerplate code.
+So here is LoadBroker class that will do all of that for you.
 
-You can think of Broker as a helping class inside of a Presenter.
+* **Broker** is used to connect a Presenter with a View.
+* **LoadBroker** is used to connect a Model with a View.
+
+You can think of Broker as a helping class inside of Presenter.
 
 ### LoadBroker
 
 ![](nucleus-images/nucleus_2.png)
 
-* **Loader** - Passes data when available
-* **Presenter** - Registers to loaders, publishes data when all data from loaders is available and a View is available.
-Re-publishes data when the View has been recreated or when new data is available from Loaders.
+* **Loader** - Just passes data when data is available
 * **View** - Just shows data
+* **Presenter** - Registers to loaders, publishes data when all data from loaders is available and a view is available.
+Re-publishes data when the view has been recreated or when new data is available from loaders.
 
-How complex a Presenter's code should be?
+How complex the Presenter's code should be?
 
     public class MainPresenter extends Presenter<MainActivity> {
-
         @Override
         public void onCreate(Bundle savedState) {
             addViewBroker(new LoaderBroker<MainActivity>(itemsLoader) {
@@ -154,13 +156,27 @@ How complex a Presenter's code should be?
         }
     }
 
-**LoadBroker** reduces a boilerplate code - it does all register/unregister job for you.
+**LoadBroker** does all register/unregister job for you.
 
 ![](nucleus-images/broker.png)
 
+RxJava variant:
+
+    public class MainPresenter extends RxPresenter<MainActivity> {
+        @Override
+        public void onCreate(Bundle savedState) {
+            addRxViewBroker(items.load(), new Action2<List<Item>, MainActivity>() {
+                @Override
+                public void call(List<Item> items, MainActivity view) {
+                    view.publishItems(items);
+                }
+            });
+        }
+    }
+
 ### Custom presenter's typical lifecycle
 
-Sometimes it is not enough just to publish a data.
+Sometimes it is not enough just to publish data.
 
     public class MyPresenter extends Presenter<ViewType> {
         @Override
@@ -173,25 +189,23 @@ Sometimes it is not enough just to publish a data.
             // publish some data when a view is attached to the presenter.
         }
 
-        // Use getView() to check availability of a view when receiving a background task result.
+        // Use getView() to check availability of the view when receiving a background task result.
 
         @Override
         protected void onDestroy() {
-            // free resources, unregister and cancel background tasks when a user exits a view
+            // free resources, unregister and cancel background tasks when a user exits the view
         }
     }
 
 # More Features
 
-* **Nested presenters** - you can reuse your MVP-driven Views in different application areas,
-just override parent presenter's onTakePresenter instead of onTakeView to take control over
-the nested presenter. Alternatively, use the Presenter.addPresenterBroker.
+* **Nested, reusable presenters** - you can reuse your MVP-driven Views in different application areas,
+just override parent presenter's onTakePresenter instead of onTakeView if you need to take control over
+the nested presenter. Alternatively, use Presenter.addPresenterBroker.
 
 * **Smart save/restore** - Presenter gets its view AFTER the view has been completely restored 
 and attached to an Activity. This allows to use View's ability to save and restore its state. 
 It is also extremely useful when dealing with user input such as EditText.
-
-* **RxJava support** - version 0.2 comes with RxJava support - use RxPresenter.
 
 # How to use
 
@@ -215,10 +229,14 @@ dependencies {
 ```
 
 ### Compiled example
+
 * [nucleus-example-0.2.apk](https://repo1.maven.org/maven2/info/android15/nucleus/nucleus-example/0.2/nucleus-example-0.2.apk)
 
 # Future releases
 
-* nucleus-loaders artifact with implementation for Retrofit+DiskCache, OrmLite and RxJava loaders
 * Additional tests
 * Improved example
+
+# Feel free to contact me
+
+sirstripy-at-gmail.com
